@@ -27,6 +27,7 @@ jobs:
       DATASOURCES_DEFAULT_URL: "jdbc:mysql://127.0.0.1:3306/mn_playground?useSSL=false&serverTimezone=UTC"
       DATASOURCES_DEFAULT_USERNAME: "root"
       DATASOURCES_DEFAULT_PASSWORD: "my-secret-pw"
+      MICRONAUT_TEST_RESOURCES_ENABLED: "false"
 
     steps:
       - name: Checkout repository
