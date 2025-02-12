@@ -3,7 +3,7 @@ name: Build and Merge
 on:
   push:
     branches:
-      - main
+      - '**'
 
 jobs:
   build:
@@ -51,3 +51,13 @@ jobs:
 
       - name: Build application
         run: ./gradlew build
+
+      - name: Merge to main if successful
+        if: ${{ success() && github.ref != 'refs/heads/main' }}
+        run: |
+          git config --global user.name 'GitHub Actions Bot'
+          git config --global user.email '<>'
+          git fetch origin main
+          git checkout main
+          git merge ${{ github.ref }} -m "Auto-merge from ${{ github.ref }}"
+          git push origin main
