@@ -77,6 +77,15 @@ jobs:
           ref: main
           fetch-depth: 0
 
+      - name: Download Jar Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: micronaut-crud-jar
+          path: build/libs/
+
+      - name: Debug - List JAR Files
+        run: ls -l build/libs/
+
       - name: Create GitHub Release
         if: ${{ success() && github.ref != 'refs/heads/main' }}
         uses: softprops/action-gh-release@v2
