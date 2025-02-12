@@ -72,7 +72,8 @@ jobs:
           path: build/libs/*.jar
 
       - name: Create GitHub Release
-        if: ${{ github.ref == 'refs/heads/main' }}
+        run: |
+          git checkout main
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ github.run_number }}
