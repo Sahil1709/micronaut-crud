@@ -71,8 +71,14 @@ jobs:
           name: micronaut-crud-jar
           path: build/libs/*.jar
 
+      - name: Checkout main branch for release
+        uses: actions/checkout@v3
+        with:
+          ref: main
+          fetch-depth: 0
+
       - name: Create GitHub Release
-        if: ${{ github.ref == 'refs/heads/main' }}
+        if: ${{ success() && github.ref != 'refs/heads/main' }}
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ github.run_number }}
