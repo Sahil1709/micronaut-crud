@@ -18,18 +18,21 @@ jobs:
         ports:
           - 3306:3306
         options: >-
-          --health-cmd "mysqladmin ping --silent" 
+          --health-cmd "mysqladmin ping -uroot -pmy-secret-pw" 
           --health-interval 10s 
           --health-timeout 5s 
           --health-retries 3
 
     env:
-      DATASOURCES_DEFAULT_URL: "jdbc:mysql://127.0.0.1:3306/mn_playground?useSSL=false&serverTimezone=UTC"
+      DATASOURCES_DEFAULT_URL: "jdbc:mysql://127.0.0.1:3306/mn_playground?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&autoReconnect=true"
       DATASOURCES_DEFAULT_USERNAME: "root"
       DATASOURCES_DEFAULT_PASSWORD: "my-secret-pw"
-      MICRONAUT_TEST_RESOURCES_ENABLED: "false"
 
     steps:
+      - name: Test MySQL Connection
+        run: |
+          mysql -h 127.0.0.1 -uroot -pmy-secret-pw -e "SHOW DATABASES;" mn_playground
+
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -44,7 +47,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Run tests
-        run: ./gradlew test
+        run: ./gradlew test --scan
 
       - name: Build application
         run: ./gradlew build
